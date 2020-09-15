@@ -267,9 +267,9 @@ def encode_ui_package(files, tag):
         data[0x4 + (item.tag & 0xFFFF) * 0x14 + 0xA] = (index >> 16) & 0xFF
         data[0x4 + (item.tag & 0xFFFF) * 0x14 + 0xB] = (index >> 24) & 0xFF
         index += item_size
-    assert(index == size)
     # Write master package size
     size = len(data) - 8
+    assert(index == size)
     data[0x4] = size & 0xFF
     data[0x5] = (size >> 8) & 0xFF
     data[0x6] = (size >> 16) & 0xFF
