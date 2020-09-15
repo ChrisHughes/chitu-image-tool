@@ -20,7 +20,9 @@ def rgb565_to_rgb888(word):
 
 def process_image(file, width = 0, height = 0):
     # Loads and processes image file
-    img = Image.open(file)
+    img_f = Image.open(file)
+    img = img_f.copy()
+    img_f.close()
     if width and height:
         img = ImageOps.fit(img, (width, height), Image.ANTIALIAS)
     return img
