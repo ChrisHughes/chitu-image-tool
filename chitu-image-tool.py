@@ -25,6 +25,8 @@ def process_image(file, width = 0, height = 0):
     img_f.close()
     if width and height:
         img = ImageOps.fit(img, (width, height), Image.ANTIALIAS)
+    # Ensure we are not using indexed color or other pixel format
+    img = img.convert('RGB')
     return img
 
 def encode(img, tag = bytearray(b'\x0B\x00\xFD\x12')):
@@ -213,7 +215,6 @@ def encode_ui_package(files, tag):
         if last_tag == 0:
             last_tag = item_tag & 0xFFFF
         for i in range((item_tag & 0xFFFF) - last_tag - 1):
-            print(0)
             data.extend([0] * 0x14)
             index += 0x14
         last_tag = item_tag & 0xFFFF
@@ -269,7 +270,7 @@ def encode_ui_package(files, tag):
         index += item_size
     # Write master package size
     size = len(data) - 8
-    assert(index == size)
+    assert(index == size + 8)
     data[0x4] = size & 0xFF
     data[0x5] = (size >> 8) & 0xFF
     data[0x6] = (size >> 16) & 0xFF
